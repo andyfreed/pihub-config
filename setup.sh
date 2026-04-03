@@ -11,6 +11,13 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Prompt for Wi-Fi hotspot password
+read -p "Enter Wi-Fi hotspot password for MOOSE: " WIFI_PASS
+if [ -z "$WIFI_PASS" ]; then
+    echo "Error: password cannot be empty"
+    exit 1
+fi
+
 echo "=== Updating system ==="
 sudo apt-get update
 sudo apt-get upgrade -y
@@ -25,6 +32,7 @@ echo "=== Copying config files ==="
 
 # Hostapd
 sudo cp "$SCRIPT_DIR/configs/hostapd.conf" /etc/hostapd/hostapd.conf
+sudo sed -i "s/wpa_passphrase=CHANGE_ME/wpa_passphrase=$WIFI_PASS/" /etc/hostapd/hostapd.conf
 sudo cp "$SCRIPT_DIR/configs/hostapd-default" /etc/default/hostapd
 
 # Dnsmasq
