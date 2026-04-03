@@ -1,0 +1,12 @@
+[Unit]
+Description=Cellular Hotspot Setup
+After=NetworkManager.service ModemManager.service tailscaled.service
+Wants=NetworkManager.service ModemManager.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/hotspot-setup.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
